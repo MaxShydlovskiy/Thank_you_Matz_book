@@ -7,5 +7,4 @@
 
 # Code has been testing with "irb"
 
-# Ruby -v
-# => 3.0.0
+# Ruby -v   => 3.0.0
