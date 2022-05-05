@@ -11,10 +11,12 @@
 =end
 # Determine US generation name based on birth year
 # Case expression test ranges with ===
+=begin
 generation = case birthyear
              when 1946..1963 "Baby Boomer" 
              when 1964..1976 "Generation X"
              when 1978..2000 "Generation Y"
+=end
 # A method to ask the user to confirm something
 def are_you_sure?       # Define a method. Note question mark!
   while true            # Loop untill we explicitly return
