@@ -131,3 +131,107 @@ def ==(o)                     # Is self == 0?
     false                     # then, by definition, self != 0
   end
 end
+
+# Our eql? methodwould look much like the == method, 
+# but it would use eql? to compare point coordinates instead of == :
+
+def eql?(o)
+  if o.instance_of? Point
+    @x.eql?(o.x) && @y.eql?(o.y)
+  elsif
+    false
+  end
+end
+
+def hash
+  code = 17
+  code = 37*code + @x.hash
+  code = 37*code + @y.hash
+  # Add lines like this for each significant instance variable
+  code # Return the resulting code
+end
+
+
+
+# The following code is our implementation of <=> . There are two things to note about it. First, it doesn’t bother with
+# the Math.sqrt method and instead simply compares the sum of the squares of the coordinates.
+# Second, after computing the sums of the squares, it simply delegates to the <=> operator of the Float class:
+
+include Comparable        # Mix in methods from the Comparable module.
+# Define an ordering for points based on their distance from the origin.
+# This method is required by the Comparable module.
+def <=>(other)
+  return nil unless other.instance_of? Point
+  @x**2 + @y**2 <=> other.x**2 + other.y**2
+end
+
+p,q = Point.new(1,0), Point.new(0,1)
+p == q            # => false: p is not equal to q
+p < q             # => false: p is not less than q
+p > q             # => false: p is not greater than q
+
+
+
+def add!(p)           # Add p to self, return modified self
+  @x += p.x
+  @y += p.y
+  self
+end
+
+
+def add(p)        # A nonmutating version of add!
+  q = self.dup    # Make a copy of self
+  q.add!(p)       # Invoke the mutating method on the copy
+end
+
+Struct.new("Point", :x, :y)   # Creates new class Struct::Point
+Point = Struct.new(:x, :y)    # Creates new class, assigns to Point
+
+# Naming Anonymous Classes
+C = Class.new   # A new class with no body, assigned to a constant
+c = C.new       # Create an instance of the class
+c.class.to_s    # => "C": constant name becomes class name
+
+p = Point.new(1,2)  # => #<struct Point x=1, y=2>
+p.x                 # => 1
+p.y                 # => 2
+p.x = 3             # => 3
+p.x                 # => 3
+
+p[:x] = 4                       # => 4: same as p.x =
+p[:x]                           # => 4: same as p.x
+p[1]                            # => 2: same as p.y
+p.each {|c| print c}            # prints "42"
+p.each_pair {|n,c| print n,c }  # prints "x4y2"
+
+q = Point.new(4,2)
+q == p              # => true
+h = {q => 1}        # Create a hash using q as a key
+h[p]                # => 1: extract value using p as key
+q.to_s              # => "#<struct Point x=4, y=2>"
+
+
+
+Point = Struct.new(:x, :y)
+class Point
+  def add!(other)
+    self.x += other.x
+    self.y += other.y
+    self
+  end
+  include Comparable      # Include a module for the class
+  def <=>(other)          # Define the <=> operator
+    return nil unless other.instance_of? Point
+    self.x**2 + self.y**2 <=> other.x**2 + other.y**2
+  end
+end
+
+Point = Struct.new(:x, :y)
+class Point
+  undef x=,y=,[]=
+end
+
+
+
+
+
